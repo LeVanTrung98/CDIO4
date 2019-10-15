@@ -32,8 +32,9 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">THUÊ</a>
+                        <a class="nav-link" href="{{route('userShow')}}">THUÊ</a>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('post.index')}}">ĐĂNG TIN</a>
                     </li>
@@ -41,9 +42,12 @@
                         <a class="nav-link" href="#">QUẢNG CÁO</a>
                     </li>
                 </ul>
-                <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+                <form class="form-inline my-2 my-lg-0" action="{{route('search')}}" method="post">
+                    @csrf
+                    <input class="form-control mr-sm-2" name="data" type="search" placeholder="Search" aria-label="Search">
+                    <input type="submit" value="Search" class="btn btn-outline-light my-2 my-sm-0">
+                    <!-- <button class="" type="submit">Search</button> -->
+                </form>
 
                     @if(\Auth::check())
                     <a href="{{route('logout')}}" class="btn btn-info">Logout</a>
@@ -56,7 +60,6 @@
                     @endif
                     
                     <!-- <button class="btn btn-primary sigin" type="button" data-toggle="modal" data-target="#myModal2">Đăng ký</button> -->
-                </form>
             </div>
         </nav>
         <div class="top">
@@ -72,13 +75,9 @@
                                 <select id="SearchContent_ctl00_ddlCategory" class="btn btn-light col-xs-12 ddl-category valid">
                                     <option selected="selected" value="0">QUẬN/HUYỆN</option>
                                     <option value="" class="seperator" disabled="disabled">-----</option>
-                                    <option value="3513">CẨM LỆ</option>
-                                    <option value="3514">HẢI CHÂU</option>
-                                    <option value="3515">HÒA VANG</option>
-                                    <option value="3516">LIÊN CHIỂU</option>
-                                    <option value="3516">NGỦ HÀNH SƠN</option>
-                                    <option value="3516">SƠN TRÀ</option>
-                                    <option value="3516">THANH KHÊ</option>            
+                                    @foreach($district as $value)
+                                        <option value="{{$value->id}}"><?php echo ucwords($value->name); ?></option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="col-lg-12">
@@ -97,26 +96,26 @@
                                 <select id="SearchContent_ctl00_ddlCategory" class="btn btn-light col-xs-12 ddl-category valid">
                                     <option selected="selected" value="0">TỐI THIỂU $</option>
                                     <option value="" class="seperator" disabled="disabled">-----</option>
-                                    <option value="3513">0</option>
-                                    <option value="3513">500.000</option>
-                                    <option value="3514">1 TRIỆU</option>
-                                    <option value="3515">2 TRIỆU</option>
-                                    <option value="3516">3 TRIỆU</option>
-                                    <option value="3516">4 TRIỆU</option>
-                                    <option value="3516">5 TRIỆU</option>            
+                                    <option value="1">0</option>
+                                    <option value="2">500.000</option>
+                                    <option value="3">1 TRIỆU</option>
+                                    <option value="4">2 TRIỆU</option>
+                                    <option value="5">3 TRIỆU</option>
+                                    <option value="6">4 TRIỆU</option>
+                                    <option value="7">5 TRIỆU</option>            
                                 </select>
                             </div>
                             <div class="col-lg-12">
                                 <select id="SearchContent_ctl00_ddlCategory" class="btn btn-light col-xs-12 ddl-category valid">
                                     <option selected="selected" value="0">TỐI ĐA $</option>
                                     <option value="" class="seperator" disabled="disabled">-----</option>
-                                    <option value="3513">1 TRIỆU</option>
-                                    <option value="3514">3 TRIỆU</option>
-                                    <option value="3515">6 TRIỆU</option>
-                                    <option value="3516">8 TRIỆU</option>
-                                    <option value="3516">10 TRIỆU</option>
-                                    <option value="3516">15 TRIỆU</option>
-                                    <option value="3516">> 15 TRIỆU</option>            
+                                    <option value="1">1 TRIỆU</option>
+                                    <option value="2">3 TRIỆU</option>
+                                    <option value="3">6 TRIỆU</option>
+                                    <option value="4">8 TRIỆU</option>
+                                    <option value="5">10 TRIỆU</option>
+                                    <option value="6">15 TRIỆU</option>
+                                    <option value="7">> 15 TRIỆU</option>            
                                 </select>
                             </div>
                             <div class="col-lg-seach">
@@ -141,7 +140,7 @@
                     </div>
                 </div>
                 <div class="top-pr">
-
+                    <img src="/images/sa.jpg" style="width: 100%; height: 100%;" alt="">
                 </div>
             </div>
         </div>

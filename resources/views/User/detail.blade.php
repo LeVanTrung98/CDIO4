@@ -63,39 +63,38 @@
                         <div class="img-main-detail gallery-top">
                             <div class="swiper-wrapper">
                             	@if(!empty($img))
-                                    <img src='{{asset("/upImage/$img")}}' class="img-fluid" style="width: 100%;"></img>
+                                    <img src='{{asset("/upImage/$img")}}' class="img-fluid" style="width: 100%; height: 500px;"></img>
                                 @endif
                                 @if(empty($img))
 									<img src='/images/Bản-vẽ-thiết-kế-phòng-trọ-đẹp-và-tiết-kiệm-chi-phí-tại-Đà-Nẵng8-1.jpg' class="img-fluid" style="width: 100%;"></img>
                                 @endif
                             </div>
-                           <!--  <div class="main-swiper-button-next swiper-button-next swiper-button-black"></div>
-                            <div class="main-swiper-button-prev swiper-button-prev swiper-button-black"></div> -->
                         </div>
-                        <div class="img-main-detail gallery-thumbs">
-                            <div class="swiper-wrapper">
-                                <div class="swiper-slide">
-                                    <img src="/images/download.jpg"></img>
-                                </div>
-                                <div class="swiper-slide">
-                                    <img src="/images/Bản-vẽ-thiết-kế-phòng-trọ-đẹp-và-tiết-kiệm-chi-phí-tại-Đà-Nẵng8-1.jpg"></img>
-                                </div>
-                               
-                            </div>
-                        </div>
+                        
                     </div>
-                    <div class="btn-detail">
+                    <div class="btn-detail d-flex justify-content-between mt-5">
 						@if($post->status==1)
-							<a href="{{route('post.edit',$post->id)}}" class="btn btn-primary text-center mx-4">Giữ Phòng</a>
-	                    	<a href="" class="btn btn-primary text-center mx-4">Lưu Tin</a>
-	                    	<a href="" class="btn btn-primary text-center mx-4">Chia Sẽ</a>
-	                    	<a href="" class="btn btn-primary text-center mx-4">Báo Cáo</a>
+							@if($check==2) 
+							<a href="{{route('post.edit',$post->id)}}" class="btn btn-primary text-center ">Giữ Phòng</a>
+							@endif
+							@if($check==1)
+							<p class="btn btn-danger text-center ">Bạn đang giữ phòng nên không thể giữ tiếp</p>
+							@endif
+	                    	<a href="" class="btn btn-primary text-center ">Lưu Tin</a>
+	                    	<a href="" class="btn btn-primary text-center ">Chia Sẽ</a>
+	                    	<a href="" class="btn btn-primary text-center ">Báo Cáo</a>
 						@endif
                     	@if($post->status==2)
-							<a href="" class="btn btn-danger text-center mx-4">Phòng Đang Được Giữ</a>
-	                    	<a href="" class="btn btn-primary text-center mx-4">Lưu Tin</a>
-	                    	<a href="" class="btn btn-primary text-center mx-4">Chia Sẽ</a>
-	                    	<a href="" class="btn btn-primary text-center mx-4">Báo Cáo</a>
+							<p class="btn btn-danger text-center mx-4">Phòng Đang Được Giữ</p>
+	                    	<a href="" class="btn btn-primary text-center ">Lưu Tin</a>
+	                    	<a href="" class="btn btn-primary text-center ">Chia Sẽ</a>
+	                    	<a href="" class="btn btn-primary text-center ">Báo Cáo</a>
+						@endif
+						@if($post->status==3)
+							<p class="btn btn-danger text-center">Phòng Đã Được Thuê</p>
+	                    	<a href="" class="btn btn-primary text-center ">Lưu Tin</a>
+	                    	<a href="" class="btn btn-primary text-center ">Chia Sẽ</a>
+	                    	<a href="" class="btn btn-primary text-center">Báo Cáo</a>
 						@endif
                     </div>
                 </div>

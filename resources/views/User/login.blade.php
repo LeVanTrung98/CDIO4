@@ -10,10 +10,14 @@
 		<div class="row">
 			<div class="col-2"></div>
 			<div class="col-8">
+				{{session()->get('errork')}}
 				@if(session()->has('success'))
 					<div class="alert alert-success text-center">{{session('success')}}</div>
 				@endif
-				@if(!session()->has('success'))
+				@if(session()->has('errorK'))
+					<div class="alert alert-danger text-center">{{session('errorK')}}</div>
+				@endif
+				@if(!session()->has('success') && !session()->has('errorK'))
 					<div class="alert alert-primary text-center">Login</div>
 				@endif
 				<form action="{{route('login')}}" method="post">

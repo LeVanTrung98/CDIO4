@@ -5,16 +5,50 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\User;
+use App\post;
+use App\District;
 use Mail;
 use App\Mail\sendRegisterUser;
 class UserController extends Controller
 {
+    public function noAccept(Request $request){
+        $post = $request->get('post');
+        $user = $request->get('user');
+        post::find($post)->userRents()->updateExistingPivot($user,['status'=>5]);
+        $updatePost = post::find($post);
+        $updatePost->status=1;
+        $updatePost->save();
+        return Response()->json('Đã hủy chấp nhận thành công!');
+    }
+    public function accept(Request $request){
+            $post = $request->get('post');
+            $user = $request->get('user');
+            $updatePost = post::find($post);
+            if($updatePost->status!=3){
+                $updatePost->userRents()->updateExistingPivot($user,['status'=>4]);
+                $updatePost->status=3;
+                $updatePost->save();
+                return Response()->json('Cho thuê thành công!');
+            }
+            else return Response()->json(['failer'=>'Trọ đã được cho thuê!']);
+        }
+    public function Come(Request $request){
+        $post = $request->get('post');
+        $user = $request->get('user');
+        post::find($post)->userRents()->updateExistingPivot($user,['status'=>2]);
+        $updatePost = post::find($post);
+        $updatePost->status=1;
+        $updatePost->save();
+        return Response()->json('Thao tác thành công!');
+    }
+
     public function logout(){
         \Auth::logout();
         return redirect()->route('formLogin');
     }
     public function showFormLogin(){
-        return view('User.login');
+        $district = District::all();
+        return view('User.login',compact('district'));
     }
     public function login(Request $request){
         $request->validate([
@@ -31,8 +65,24 @@ class UserController extends Controller
         // dd($request->all());
         if(User::where('email','=',$request->get('email'))->first()){
             if(\Auth::attempt(['email'=>$request->get('email'),'password'=>$request->get('password')])){
-                // dd($request->get('path'));
-                return redirect('http://cdio4.com/'.$request->get('path'));
+                $user = User::findOrFail(\Auth::user()->id);
+                $check=1;
+                foreach ($user->infringes as $key => $value) {
+                    if($value->status==2){
+                        $check = 2;
+                        break;
+                    }
+                }
+                if($check==1){
+                    if(\Auth::user()->role == 1){
+                        return redirect('http://cdio4.com/'.$request->get('path'));
+                    }
+                    if(\Auth::user()->role == 2){
+                        return view('Admin.home');
+                    }
+                }else{
+                    return redirect()->route('formLogin')->with('errorK','Tài khoản của bạn đã bị khóa vì đã vi phạm quy định!'); 
+                }
             }
             else{
                 return back()->with('errorP','Password is not correct!');
@@ -69,6 +119,40 @@ class UserController extends Controller
         }else{
             return back()->with('error','Email is not exists!');
         }
+    }
+
+    public function showUser(){
+        $userid = \Auth::user();
+        $user = User::find($userid->id);
+        $date=array();
+        $idPost = array();
+        foreach ($user->rentPosts as $key => $value){
+            // if($value->pivot->status==4 || $value->pivot->status==5){
+                $date[$key]=$value->pivot->created_at;
+                $idPost[$key]=$value;
+            // }
+            
+        }
+        $house=array();
+        foreach ($user->postUsers as $key => $value) {
+                $house[$value->id]=$value;
+        }
+        $justRent = array_combine($date,$idPost);
+        // dd($house);
+        $district =District::all();
+
+        return view('User.userRents',compact('justRent','house','district'));
+    }
+
+    public function showDetail($id){
+        $post = post::find($id);
+        $rent=array();
+        $district=District::all();
+        foreach ($post->userRents as $key => $value) {
+            $rent[$key]=$value;
+        }
+        // dd($rent);
+        return view('User.detailUser',compact('rent','district'));
     }
     /**
      * Display a listing of the resource.
@@ -141,7 +225,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        
     }
 
     /**

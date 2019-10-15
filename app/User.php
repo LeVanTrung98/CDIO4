@@ -40,4 +40,11 @@ class User extends Authenticatable
     public function postUsers(){
         return $this->belongsToMany('App\post','postUser','user_id','post_id')->withPivot('name','phone','address')->withTimestamps();
     }
+
+    public function rentPosts(){
+        return $this->belongsToMany('App\post','renthouse','user_id','post_id')->withPivot('status')->withTimestamps();
+    }
+    public function infringes(){
+        return $this->hasMany('App\Infringe');
+    }
 }
