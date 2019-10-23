@@ -23,7 +23,7 @@
 		Route::post('updatePost','AdminController@updatePost')->name('adminUpdatePost');
 	});
 
-
+	
 	Route::resource('post','PostController')->middleware('login');
 	Route::get('usersPost/{id}','PostController@formUpdate')->name('formUpdate');
 	Route::post('userPost','PostController@userUpdatePost')->name('userUpdatePost');

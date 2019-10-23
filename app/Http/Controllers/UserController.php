@@ -10,7 +10,7 @@ use App\District;
 use Mail;
 use App\Mail\sendRegisterUser;
 class UserController extends Controller
-{
+{   
     public function noAccept(Request $request){
         $post = $request->get('post');
         $user = $request->get('user');
@@ -259,6 +259,11 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        
+        $post = post::findOrFail($id);
+        $post->status=1;
+        $post->save();
+        $post->userRents()->updateExistingPivot(\Auth::user()->id,['status'=>6]);
+        return Response()->json('Bạn đã hủy giữ trọ thành công!');
     }
 }

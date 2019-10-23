@@ -49,12 +49,13 @@
 		</div>
 		<div class="col-5">
 			<div class="alert alert-success text-center">Đã Thuê</div>
-			<table class="table table-inverse">
+			<table class="table table-inverse " id="tableRent">
 				<thead>
 					<tr>
 						<th>Date</th>
 						<td>House</td>
 						<th>Status</th>
+						<th>Delete</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -70,8 +71,14 @@
 							<td class="text-info">Đang chọn</td>
 						@elseif($value->pivot->status==3)
 							<td class="text-warning">Không đến</td>
+						@elseif($value->pivot->status==6)
+							<td class="text-primary">Đã hủy giữ trọ</td>
 						@endif
-						
+						<td>
+							@if($value->pivot->status==1)
+							<div class="btn btn-danger deleteKeepHouse" data_id="{{$value->id}}">Delete</div>
+							@endif
+						</td>
 					</tr>
 					@endforeach
 				</tbody>
@@ -81,7 +88,7 @@
 	</div>
 </div>
 
-<!-- <script type="text/javascript">
+<script type="text/javascript">
 	$(document).ready(function(){
 		$.ajaxSetup({
 			headers:{
@@ -89,9 +96,20 @@
 			}
 		});
 
-		$(document).on('click','.delete',function(){
+		$(document).on('click','.deleteKeepHouse',function(){
 			var id = $(this).attr('data_id');
+			if(confirm('Bạn có muốn hủy giữ trọ này không?')){
+				$.ajax({
+					url:'user/'+id,
+					dataType:'json',
+					method:'delete',
+					success:function(data){
+						alert(data);
+						$('#tableRent').load(' #tableRent');
+					}
+				});
+			}
 		});
 	});
-</script> -->
+</script>
 @endsection
